@@ -20,8 +20,11 @@ recipes = [
 def recipes_search():
     recipe_id = request.args.get('recipe_id')
     if recipe_id:
-        recipe = recipes[int(recipe_id)]
-        return jsonify(recipe)
+        try:
+            recipe = recipes[int(recipe_id)]
+            return jsonify(recipe)
+        except:
+            return jsonify({'message': "This recipe doesn't exist."})
     else:
         return jsonify(recipes)
 
