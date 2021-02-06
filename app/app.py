@@ -1,0 +1,38 @@
+from flask import Flask, render_template, jsonify, request
+
+app = Flask(__name__)
+
+recipes = [
+    {
+    'id': 0,
+    'title': 'recipe 1',
+    'ingredients': 'apple, flour, juice, water, eggs',
+    'instructions': '1. add flour to water. 2. Add sugar. 3. Mix.'},
+    {'id': 1,
+    'title': 'recipe 2',
+    'ingredients': 'pear, beans, juice, water, eggs',
+    'instructions': '1. add pear to water. 2. Add eggs. 3. Mix.'},
+]
+
+
+
+@app.route("/recipes")
+def recipes_search():
+    recipe_id = request.args.get('recipe_id')
+    if recipe_id:
+        recipe = recipes[int(recipe_id)]
+        return jsonify(recipe)
+    else:
+        return jsonify(recipes)
+
+@app.route('/recipe_add', methods = ['POST'])
+def add_recipe():
+    recipe = request.get_json()
+    try:
+        if recipe['id'] and recipe['title'] and recipe['ingredients'] and recipe['instructions']:
+            recipes.append(recipe)
+            return jsonify({'message': 'The recipe has been added'})
+    except:
+        return jsonify({'message': 'The recipe is missing one of the attributes.'})
+
+app.run(debug=True)
