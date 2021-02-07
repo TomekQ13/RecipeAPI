@@ -6,10 +6,5 @@ pipeline {
                 docker-compose up --build
             }
         }
-        stage('Stop') {
-            steps {
-                docker-compose down
-            }
-        }
     }
 }
