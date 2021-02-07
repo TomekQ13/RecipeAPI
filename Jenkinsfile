@@ -1,6 +1,15 @@
 pipeline {
     agent any
     stages {
-        stage('Build')
+        stage('Build') {
+            steps {
+                docker-compose up --build
+            }
+        }
+        stage('Stop') {
+            steps {
+                docker-compose down
+            }
+        }
     }
 }
