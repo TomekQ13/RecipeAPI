@@ -1,4 +1,7 @@
 from flask import Flask, json, render_template, jsonify, request
+from pymongo import MongoClient
+import os
+
 
 app = Flask(__name__)
 
@@ -13,6 +16,11 @@ recipes = [
     'ingredients': 'pear, beans, juice, water, eggs',
     'instructions': '1. add pear to water. 2. Add eggs. 3. Mix.'},
 ]
+
+con_string = os.environ.get('MONGO_RECIPEAPP_URI')
+cluster = MongoClient(con_string)
+db = cluster['RecipeApp']
+collection = db['RecipeApp_collection']
 
 
 
@@ -51,3 +59,4 @@ def delete_recipe():
         return jsonify({'message': 'Specify a recipe_id as the request parameter.'})
 
 app.run(debug=True)
+
