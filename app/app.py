@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, json, render_template, jsonify, request
 
 app = Flask(__name__)
 
@@ -37,5 +37,17 @@ def add_recipe():
             return jsonify({'message': 'The recipe has been added'})
     except:
         return jsonify({'message': 'The recipe is missing one of the attributes.'})
+
+@app.route('/recipe_delete', methods=['GET'])
+def delete_recipe():
+    recipe_id = request.args.get('recipe_id')
+    if recipe_id:
+        try:
+            recipes.pop(int(recipe_id))
+            return jsonify({'message': 'The recipe has been deleted.'})
+        except:
+            return jsonify({'message': 'This recipe does not exist.'})
+    else:
+        return jsonify({'message': 'Specify a recipe_id as the request parameter.'})
 
 app.run(debug=True)
