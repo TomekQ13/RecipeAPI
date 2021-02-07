@@ -3,7 +3,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh "docker-compose up --build"
+                sh "docker build . -t recipes_api:latest"
+            }
+        }
+        stage('Run'){
+            steps{
+                sh "docker run --env-file .env -d -p 5000:500 recipes_api:latest"
             }
         }
     }
