@@ -7,4 +7,4 @@ COPY Pipfile Pipfile.lock .env ./
 RUN pipenv install --system --deploy
 
 COPY . .
-CMD ["python", "app/app.py"]
+CMD ["flask", "run", "--host=0.0.0.0"]

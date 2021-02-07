@@ -1,4 +1,4 @@
-from flask import Flask, json, render_template, jsonify, request
+from flask import Flask, jsonify, request
 from pymongo import MongoClient
 import os
 
@@ -56,6 +56,4 @@ def delete_recipe():
             return jsonify({'message': 'This recipe does not exist.'})
     else:
         return jsonify({'message': 'Specify a recipe_id as the request parameter.'})
-
-app.run(debug=True)
 
