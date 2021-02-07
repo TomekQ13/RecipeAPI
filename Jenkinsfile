@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Run'){
             steps{
-                sh "docker run --env-file .env -d -p 5000:500 recipes_api:latest"
+                sh "docker run --env-file .env -d -p 5000:5000 recipes_api:latest"
             }
         }
     }
