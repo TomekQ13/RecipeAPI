@@ -2,7 +2,6 @@ from flask import Flask, json, render_template, jsonify, request
 from pymongo import MongoClient
 import os
 
-
 app = Flask(__name__)
 
 recipes = [
