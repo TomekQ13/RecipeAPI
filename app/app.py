@@ -5,18 +5,6 @@ from uuid import uuid4
 
 app = Flask(__name__)
 
-recipes = [
-    {
-    'id': 0,
-    'title': 'recipe 1',
-    'ingredients': 'apple, flour, juice, water, eggs',
-    'instructions': '1. add flour to water. 2. Add sugar. 3. Mix.'},
-    {'id': 1,
-    'title': 'recipe 2',
-    'ingredients': 'pear, beans, juice, water, eggs',
-    'instructions': '1. add pear to water. 2. Add eggs. 3. Mix.'},
-]
-
 con_string = os.environ.get('MONGO_RECIPEAPP_URI')
 cluster = MongoClient(con_string)
 db = cluster['RecipeApp']
