@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from pymongo import MongoClient
 import os
+from uuid import uuid4
 
 app = Flask(__name__)
 
@@ -21,27 +22,31 @@ cluster = MongoClient(con_string)
 db = cluster['RecipeApp']
 collection = db['RecipeApp_collection']
 
-
-
 @app.route("/recipes")
 def recipes_search():
-    recipe_id = request.args.get('recipe_id')
+    recipe_id = request.args.get('recipe_id')    
     if recipe_id:
-        try:
-            recipe = recipes[int(recipe_id)]
+        #if recipe id is provided search for this recipe
+        recipe = collection.find_one({'_id': recipe_id})
+        if recipe:
             return jsonify(recipe)
-        except:
+        else:
             return jsonify({'message': "This recipe doesn't exist."})
     else:
-        return jsonify(recipes)
+        #else return all recipes
+        results = []
+        for post in collection.find():
+            results.append(post)
+        return jsonify(results)
 
 @app.route('/recipe_add', methods = ['POST'])
 def add_recipe():
-    recipe = request.get_json()
+    recipe = request.get_json()    
     try:
-        if recipe['id'] and recipe['title'] and recipe['ingredients'] and recipe['instructions']:
-            recipes.append(recipe)
-            return jsonify({'message': 'The recipe has been added'})
+        if recipe['title'] and recipe['ingredients'] and recipe['instructions']:
+            recipe['_id'] = uuid4().hex
+            collection.insert_one(recipe)
+            return jsonify({'message': 'The recipe has been added.'})
     except:
         return jsonify({'message': 'The recipe is missing one of the attributes.'})
 
@@ -49,11 +54,10 @@ def add_recipe():
 def delete_recipe():
     recipe_id = request.args.get('recipe_id')
     if recipe_id:
-        try:
-            recipes.pop(int(recipe_id))
+        if collection.find_one_and_delete({'_id': recipe_id}):
             return jsonify({'message': 'The recipe has been deleted.'})
-        except:
+        else:
             return jsonify({'message': 'This recipe does not exist.'})
     else:
-        return jsonify({'message': 'Specify a recipe_id as the request parameter.'})
+        return jsonify({'message': 'Specify the recipe_id as the request parameter.'})
 
